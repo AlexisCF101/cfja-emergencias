@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal de Servicios de Emergencia</title>
+  <style>
+    :root {
+      --primary: #e63946;
+      --primary-hover: #c5221f;
+      --secondary: #1d3557;
+      --accent: #457b9d;
+      --light-bg: #f8f9fa;
+      --card-bg: #ffffff;
+      --text: #212529;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background-color: var(--light-bg);
+      color: var(--text);
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Encabezado Principal */
+    header {
+      background: linear-gradient(135deg, #1d3557 0%, #e63946 100%);
+      color: white;
+      text-align: center;
+      padding: 3rem 1.5rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-weight: 800;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      opacity: 0.95;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Contenedor General */
+    .container {
+      max-width: 1100px;
+      margin: 2.5rem auto;
+      padding: 0 1.5rem;
+      flex: 1;
+    }
+
+    /* Alerta de Urgencia */
+    .alert-banner {
+      background: #ffe3e3;
+      border-left: 6px solid var(--primary);
+      padding: 1.2rem;
+      border-radius: 8px;
+      margin-bottom: 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .alert-icon {
+      font-size: 2rem;
+    }
+
+    /* Grid de Servicios */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .card-content {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-title {
+      font-size: 1.4rem;
+      color: var(--secondary);
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .card-desc {
+      color: #555;
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn-call {
+      display: block;
+      width: 100%;
+      text-align: center;
+      background-color: var(--primary);
+      color: white;
+      text-decoration: none;
+      padding: 0.8rem;
+      border-radius: 8px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      transition: background-color 0.2s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-call:hover {
+      background-color: var(--primary-hover);
+    }
+
+    /* Sección de Guía Interactiva */
+    .interactive-section {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      margin-bottom: 3rem;
+    }
+
+    .interactive-section h2 {
+      color: var(--secondary);
+      margin-bottom: 1.5rem;
+      font-size: 1.6rem;
+      border-bottom: 3px solid var(--accent);
+      padding-bottom: 0.5rem;
+      display: inline-block;
+    }
+
+    .accordion-item {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      margin-bottom: 0.8rem;
+      overflow: hidden;
+    }
+
+    .accordion-header {
+      width: 100%;
+      background: #f1f5f9;
+      padding: 1rem 1.2rem;
+      text-align: left;
+      border: none;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--secondary);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .accordion-header:hover {
+      background: #e2e8f0;
+    }
+
+    .accordion-body {
+      padding: 1rem 1.2rem;
+      display: none;
+      background: white;
+      font-size: 0.95rem;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    /* Formulario de Reporte */
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-weight: 600;
+      color: var(--secondary);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
+
+    .btn-submit {
+      background-color: var(--accent);
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1rem;
+      transition: background-color 0.2s;
+    }
+
+    .btn-submit:hover {
+      background-color: var(--secondary);
+    }
+
+    .status-msg {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 8px;
+      display: none;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    /* Pie de Página */
+    footer {
+      background-color: var(--secondary);
+      color: white;
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      margin-top: auto;
+      border-top: 5px solid var(--primary);
+    }
+
+    footer .author-name {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+      color: #ffffff;
+    }
+
+    footer .author-group {
+      font-size: 1.1rem;
+      color: #a8dadc;
+      font-weight: 600;
+    }
+
+    footer p {
+      font-size: 0.9rem;
+      color: #cccccc;
+      margin-top: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Encabezado -->
+  <header>
+    <h1>Centro de Atención a Emergencias</h1>
+    <p>Asistencia inmediata y guías de respuesta rápida</p>
+  </header>
+
+  <div class="container">
+    <!-- Banner de Alerta -->
+    <div class="alert-banner">
+      <span class="alert-icon">🚨</span>
+      <div>
+        <strong>Línea Unificada de Emergencias: 911</strong><br>
+        En situaciones de riesgo inminente, mantén la calma y mantén la línea telefónica despejada.
+      </div>
+    </div>
+
+    <!-- Tarjetas de Servicios -->
+    <div class="services-grid">
+      <!-- Tarjeta 1 -->
+      <div class="card">
+        <img class="card-img" src="https://images.unsplash.com/photo-1587745416684-47953f16f02f?auto=format&fit=crop&w=600&q=80" alt="Ambulancia de Urgencias">
+        <div class="card-content">
+          <div>
+            <h3 class="card-title">Urgencias Médicas</h3>
+            <p class="card-desc">Atención paramédica prehospitalaria y traslado de emergencia ante accidentes o enfermedades graves.</p>
+          </div>
+          <a href="tel:911" class="btn-call">📞 Llamar Ambulancia</a>
+        </div>
+      </div>
+
+      <!-- Tarjeta 2 -->
+      <div class="card">
+        <img class="card-img" src="https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=600&q=80" alt="Cuerpo de Bomberos">
+        <div class="card-content">
+          <div>
+            <h3 class="card-title">Cuerpo de Bomberos</h3>
+            <p class="card-desc">Control de incendios, fugas de gas, rescate urbano y gestión de materiales peligrosos.</p>
+          </div>
+          <a href="tel:911" class="btn-call">📞 Llamar Bomberos</a>
+        </div>
+      </div>
+
+      <!-- Tarjeta 3 -->
+      <div class="card">
+        <img class="card-img" src="https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=600&q=80" alt="Patrulla Policial">
+        <div class="card-content">
+          <div>
+            <h3 class="card-title">Seguridad Pública</h3>
+            <p class="card-desc">Intervención policial ante emergencias de seguridad, alteración del orden o prevención de delitos.</p>
+          </div>
+          <a href="tel:911" class="btn-call">📞 Llamar Policía</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Guía Interactiva de Primeros Auxilios -->
+    <div class="interactive-section">
+      <h2>Guía Rápida de Primeros Auxilios</h2>
+      
+      <div class="accordion-item">
+        <button class="accordion-header" onclick="toggleAccordion(this)">
+          🫀 Reanimación Cardiopulmonar (RCP) <span>+</span>
+        </button>
+        <div class="accordion-body">
+          <ol style="margin-left: 1.2rem;">
+            <li>Verifica que la zona sea segura para ti y para la víctima.</li>
+            <li>Coloca las manos en el centro del pecho de la persona.</li>
+            <li>Presiona rápido y fuerte a un ritmo de 100 a 120 compresiones por minuto.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-header" onclick="toggleAccordion(this)">
+          🔥 Tratamiento de Quemaduras <span>+</span>
+        </button>
+        <div class="accordion-body">
+          <ul style="margin-left: 1.2rem;">
+            <li>Enfría la quemadura con agua corriente a temperatura ambiente por 10 a 15 minutos.</li>
+            <li>No apliques hielo, cremas ni remedios caseros.</li>
+            <li>Cubre la zona limpia con una gasa o paño esterilizado.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <button class="accordion-header" onclick="toggleAccordion(this)">
+          🗣️ Atragantamiento (Maniobra de Heimlich) <span>+</span>
+        </button>
+        <div class="accordion-body">
+          <ol style="margin-left: 1.2rem;">
+            <li>Colócate detrás de la persona y rodea su cintura con tus brazos.</li>
+            <li>Forma un puño con una mano y colócalo justo por encima del ombligo.</li>
+            <li>Presiona con fuerza hacia adentro y hacia arriba hasta expulsar el objeto.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulario Interactivo de Simulación de Reporte -->
+    <div class="interactive-section">
+      <h2>Simulador de Reporte de Incidente</h2>
+      <form id="emergencyForm" onsubmit="submitReport(event)">
+        <div class="form-group">
+          <label for="type">Tipo de Incidente:</label>
+          <select id="type" class="form-control" required>
+            <option value="">-- Selecciona una opción --</option>
+            <option value="Médico">Accidente / Urgencia Médica</option>
+            <option value="Incendio">Incendio / Fuga de Gas</option>
+            <option value="Seguridad">Seguridad / Robo</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="location">Ubicación / Dirección:</label>
+          <input type="text" id="location" class="form-control" placeholder="Ej. Av. Principal y Calle 5" required>
+        </div>
+        <div class="form-group">
+          <label for="details">Detalles adicionales:</label>
+          <textarea id="details" class="form-control" rows="3" placeholder="Describe brevemente lo sucedido..."></textarea>
+        </div>
+        <button type="submit" class="btn-submit">Enviar Reporte de Prueba</button>
+      </form>
+      <div id="statusMsg" class="status-msg"></div>
+    </div>
+  </div>
+
+  <!-- Pie de página -->
+  <footer>
+    <div class="author-name">Jonatan Alexis Castro Fabela</div>
+    <div class="author-group">Grupo: 5:J</div>
+    <p>© 2026 Portal de Servicios de Emergencia | Proyecto Web</p>
+  </footer>
+
+  <!-- Scripts para interactividad -->
+  <script>
+    // Función para desplegar la guía de primeros auxilios
+    function toggleAccordion(button) {
+      const body = button.nextElementSibling;
+      const span = button.querySelector('span');
+      if (body.style.display === "block") {
+        body.style.display = "none";
+        span.textContent = "+";
+      } else {
+        body.style.display = "block";
+        span.textContent = "-";
+      }
+    }
+
+    // Función para procesar la simulación de reporte
+    function submitReport(event) {
+      event.preventDefault();
+      const type = document.getElementById('type').value;
+      const location = document.getElementById('location').value;
+      const statusMsg = document.getElementById('statusMsg');
+
+      statusMsg.style.display = 'block';
+      statusMsg.style.backgroundColor = '#d4edda';
+      statusMsg.style.color = '#155724';
+      statusMsg.innerHTML = `✅ <strong>¡Reporte de prueba recibido!</strong><br>Se ha registrado la alerta de tipo <em>${type}</em> en <em>${location}</em>.`;
+
+      document.getElementById('emergencyForm').reset();
+    }
+  </script>
+</body>
+</html>
